@@ -4,7 +4,7 @@
       <li class="nav-item">
         <router-link to="/">Home</router-link>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" v-if="authenticated">
         <router-link to="/about">About</router-link>
       </li>
     </ul>
@@ -13,6 +13,40 @@
     </div>
   </div>
 </template>
+
+<script>
+    import * as axios from "axios";
+
+    export default {
+        name: 'App',
+        data() {
+            return {
+                authenticated: false,
+            }
+        },
+        mounted() {
+            console.log(process.env);
+            axios.get(process.env.VUE_APP_BACKEND_URL + '/users/me')
+                    .then(response => console.log(response))
+                    .catch((error) => {
+                      if(error.response.status === 401) {
+                          //window.location.replace(process.env.VUE_APP_BACKEND_URL + "/auth/cas");
+                      }})
+                    .then(() => this.authenticated = true);
+            if(!this.authenticated) {
+                console.log("not auth");
+            }
+        },
+        methods: {
+            setAuthenticated(status) {
+                this.authenticated = status;
+            },
+            logout() {
+                this.authenticated = false;
+            }
+        }
+    }
+</script>
 
 <style lang="less">
 #app {
