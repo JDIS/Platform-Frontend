@@ -3,16 +3,17 @@ View to display the leaderboard.
 -->
 
 <template>
-  <div class="leaderboard">
+  <div class="leaderboard-view">
+    <h1 class="spaced">Classement</h1>
     <LeaderboardComponent :ranking="ranking"/>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import LeaderboardComponent from '@/components/Leaderboard.vue'; // @ is an alias to /src
+    import {Component, Vue} from "vue-property-decorator";
+    import LeaderboardComponent from "@/components/Leaderboard.vue"; // @ is an alias to /src
 
-@Component({
+    @Component({
   components: {
     LeaderboardComponent,
   },

@@ -44,23 +44,12 @@ Main Vue template for the app. Contains the navigation bar and handles login log
         name: 'App',
         data() {
             return {
-                authenticated: window.localStorage.getItem("authenticated"),
+                authenticated: window.localStorage.getItem("authenticated") === "true",
             }
         },
         mounted() {
             console.log(process.env);
-            axios.get(process.env.VUE_APP_BACKEND_URL + '/users/me')
-                    .then(response => console.log(response))
-                    .catch((error) => {
-                      if(error.response.status === 401) {
-                          //window.location.replace(process.env.VUE_APP_BACKEND_URL + "/auth/cas");
-                      }})
-                    .then(() => {
-                      //this.setAuthenticated(true)
-                    });
-            if(!this.authenticated) {
-                console.log('not auth');
-            }
+            this.login(true);
         },
         methods: {
           setAuthenticated(status) {
@@ -68,10 +57,25 @@ Main Vue template for the app. Contains the navigation bar and handles login log
             this.authenticated = status;
           },
           logout() {
-            this.setAuthenticated(false);
+            axios.post(process.env.VUE_APP_BACKEND_URL + '/signout', {withCredentials: true})
+                    .then(response => this.setAuthenticated(false))
+                    .catch((error) => console.log(error));
           },
-          login() {
-            this.setAuthenticated(true);
+          login(withCredentials) {
+            axios.get(process.env.VUE_APP_BACKEND_URL + '/users/me', {withCredentials: withCredentials})
+                    .then(response => {
+                      if(response.status === 200) {
+                        this.setAuthenticated(true);
+                      } else if(response.status === 204) {
+                        this.setAuthenticated(false);
+                        window.location.replace(process.env.VUE_APP_BACKEND_URL + '/auth/cas');
+                      }
+                      console.log(response);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      window.location.replace(process.env.VUE_APP_BACKEND_URL + '/auth/cas');
+                    });
           }
         }
     }
