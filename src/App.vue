@@ -1,3 +1,7 @@
+<!--
+Main Vue template for the app. Contains the navigation bar and handles login logic.
+-->
+
 <template>
   <div id="app">
     <div class="container-fluid" id="nav-container">
@@ -20,7 +24,7 @@
             <li class="nav-item" v-if="!authenticated">
               <a href="#" v-on:click="login">Connexion</a>
             </li>
-            <li class="nav-item" v-if="authenticated">
+            <li class="nav-item" v-else>
               <a href="#" v-on:click="logout">Déconnexion</a>
             </li>
           </ul>
@@ -103,5 +107,9 @@
   .nav-item {
     margin: 0 10px;
   }
+}
+
+.spaced {
+  margin: 15px;
 }
 </style>
