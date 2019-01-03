@@ -1,5 +1,5 @@
 <!--
-Component that displays a list of challenges.
+Component that displays a list of challenges, grouped by category.
 -->
 
 <template>
@@ -7,8 +7,26 @@ Component that displays a list of challenges.
     <div class="container-fluid">
       <div class="row">
           <div class="container-fluid">
-              <div class="row" v-for="challenge of challenges">
-                  <pre>{{ challenge | json }}</pre>
+              <div class="row align-items-center category" v-for="category of challenges">
+                  <div class="container-fluid category-header" @click="toggleCategory(category)">
+                      <h2>CATEGORIE: {{ category.key }}</h2>
+                  </div>
+                  <div class="container-fluid" :class="{hidden: !category.isVisible}">
+                      <div class="row challenge-preview" @click="openChallenge(challenge)" v-for="challenge of category.values">
+                          <div class="col-12">
+                              <h2>{{ challenge.name }}</h2>
+                          </div>
+                          <div class="col-5">
+                              <h5>Catégorie: <strong>{{ challenge.category }}</strong></h5>
+                          </div>
+                          <div class="col-4">
+                              <strong><span v-if="challenge.isCodingChallenge">Correction automatique</span></strong>
+                          </div>
+                          <div class="col-3">
+                              <h4>{{ challenge.points }} point(s)</h4>
+                          </div>
+                      </div>
+                  </div>
               </div>
           </div>
       </div>
@@ -18,9 +36,33 @@ Component that displays a list of challenges.
 
 <script lang="ts">
     import {Component, Prop, Vue} from "vue-property-decorator";
+    import {Category} from "@/models/Category";
+    import {Challenge} from "@/models/Challenge";
 
     @Component
 export default class ChallengesComponent extends Vue {
-    @Prop() private challenges!: Challenge[];
+    @Prop() challenges!: Category[];
+
+    openChallenge(challenge: Challenge): void {
+        console.log("hihi", challenge);
+    }
+
+    toggleCategory(category: Category) {
+        category.isVisible = !category.isVisible;
+    }
+
 }
 </script>
+
+<style scoped lang="less">
+    .category {
+        border: 1px solid red;
+    }
+    .challenge-preview {
+        border: 1px solid black;
+    }
+
+    .category-header {
+        cursor: pointer;
+    }
+</style>

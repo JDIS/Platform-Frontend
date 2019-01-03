@@ -24,9 +24,10 @@ Component that displays a table with a ranking of players.
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
+  import {Component, Prop, Vue} from "vue-property-decorator";
+  import {Rank} from "@/models/Rank";
 
-    @Component
+  @Component
 export default class LeaderboardComponent extends Vue {
     @Prop() private ranking!: Rank[];
 }

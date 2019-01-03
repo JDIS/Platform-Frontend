@@ -116,4 +116,7 @@ Main Vue template for the app. Contains the navigation bar and handles login log
 .spaced {
   margin: 15px;
 }
+  .hidden {
+    display: none;
+  }
 </style>

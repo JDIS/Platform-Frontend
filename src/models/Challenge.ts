@@ -1,7 +1,7 @@
 /**
  * A challenge to solve
  */
-class Challenge {
+export class Challenge {
     public name!: string;
     public content!: string;
     public category!: string;

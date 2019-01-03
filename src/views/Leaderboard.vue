@@ -19,10 +19,7 @@ View to display the leaderboard.
   },
 })
 export default class Leaderboard extends Vue {
-
-  data() {
-    return {
-      ranking: [
+    protected ranking = [
         {
           "name": "Émilio de la Gonzalez",
           "rank": 1,
@@ -34,7 +31,5 @@ export default class Leaderboard extends Vue {
           "points": 0
         }
       ]
-    }
-    }
 }
 </script>
