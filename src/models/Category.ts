@@ -1,18 +1,13 @@
 /**
- * A list of challenges grouped by a category
+ * Category for challenges
  */
-import {Challenge} from '@/models/Challenge';
 
 export class Category {
-    /**
-     * Category name
-     */
-    public key: string;
-    public values: Challenge[];
-    public isVisible: boolean = true;
+    public id: string;
+    public name: string;
 
-    constructor(key: string, values: Challenge[]) {
-        this.key = key;
-        this.values = values;
+    constructor(id: string, name: string) {
+        this.name = name;
+        this.id = id;
     }
 }

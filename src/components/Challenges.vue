@@ -9,7 +9,7 @@ Component that displays a list of challenges, grouped by category.
           <div class="container-fluid">
               <div class="row align-items-center category" v-for="category of challenges">
                   <div class="container-fluid category-header" @click="toggleCategory(category)">
-                      <h2>CATEGORIE: {{ category.key }}</h2>
+                      <h2>CATEGORIE: {{ categories[category.key] }}</h2>
                   </div>
                   <div class="container-fluid" :class="{hidden: !category.isVisible}">
                       <div class="row challenge-preview" @click="openChallenge(challenge)" v-for="challenge of category.values">
@@ -17,7 +17,7 @@ Component that displays a list of challenges, grouped by category.
                               <h2>{{ challenge.name }}</h2>
                           </div>
                           <div class="col-5">
-                              <h5>Catégorie: <strong>{{ challenge.category }}</strong></h5>
+                              <h5>Catégorie: <strong>{{ categories[challenge.category] }}</strong></h5>
                           </div>
                           <div class="col-4">
                               <strong><span v-if="challenge.isCodingChallenge">Correction automatique</span></strong>
@@ -36,18 +36,20 @@ Component that displays a list of challenges, grouped by category.
 
 <script lang="ts">
     import {Component, Prop, Vue} from "vue-property-decorator";
-    import {Category} from "@/models/Category";
+    import {GroupedChallenges} from "@/models/GroupedChallenges";
     import {Challenge} from "@/models/Challenge";
+    import {Category} from "@/models/Category";
 
     @Component
 export default class ChallengesComponent extends Vue {
-    @Prop() challenges!: Category[];
+    @Prop() challenges!: GroupedChallenges[];
+    @Prop() categories!: Category[];
 
     openChallenge(challenge: Challenge): void {
-        console.log("hihi", challenge);
+        this.$router.push(`/challenge/${challenge.id}`, (a) => console.log("yezzer",a))
     }
 
-    toggleCategory(category: Category) {
+    toggleCategory(category: GroupedChallenges) {
         category.isVisible = !category.isVisible;
     }
 
@@ -60,6 +62,7 @@ export default class ChallengesComponent extends Vue {
     }
     .challenge-preview {
         border: 1px solid black;
+        cursor: pointer;
     }
 
     .category-header {
