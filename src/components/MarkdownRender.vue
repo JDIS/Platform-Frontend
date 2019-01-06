@@ -1,6 +1,8 @@
 <template>
-  <div class="markdown-render" v-html="html">
-  </div>
+  <span>
+    <h1>Description</h1>
+    <div class="markdown-render" v-html="html"/>
+  </span>
 </template>
 
 <script lang="ts">
@@ -18,3 +20,10 @@
     }
   }
 </script>
+
+<style scoped lang="less">
+    .markdown-render {
+        overflow: scroll;
+        word-wrap: break-word;
+    }
+</style>

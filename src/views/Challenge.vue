@@ -4,9 +4,8 @@ View to display a single challenge to solve.
 
 <template>
   <div class="challenge-view">
-    <h1 class="spaced">Challenge</h1>
-      <MarkdownRender markdown="**test**"/>
-      <CodeEditor/>
+    <MarkdownRender class="markdow-render" markdown="**test**"/>
+    <CodeEditor class="code-editor"/>
   </div>
 </template>
 
@@ -22,6 +21,21 @@ View to display a single challenge to solve.
     },
   })
   export default class ChallengeView extends Vue {
-    challenge: any = null;
+    private challenge: any = null;
   }
 </script>
+
+<style scoped lang="less">
+  .markdow-render {
+    float: left;
+    width: 50%;
+  }
+
+  .code-editor {
+    float: right;
+    width: 50%;
+  }
+
+  .challenge-view {
+  }
+</style>
