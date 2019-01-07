@@ -30,7 +30,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/Challenges.vue'),
     },
     {
-      path: '/challenge',
+      path: '/challenge/:id',
       name: 'challenge',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
