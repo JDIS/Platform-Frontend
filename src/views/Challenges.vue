@@ -29,7 +29,7 @@ View to display the challenges list.
     categories: any = {};
 
     groupChallenges(challenges: Challenge[]) {
-      let categories = HelperMethods.groupByArray(challenges, "category");
+      let categories = HelperMethods.groupByArray(challenges, "categoryId");
       categories.forEach((category) => category.isVisible = true);
       return categories;
     }

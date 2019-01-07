@@ -38,7 +38,7 @@ Main Vue template for the app. Contains the navigation bar and handles login log
 </template>
 
 <script>
-    import * as axios from "axios";
+    import axios from 'axios'
 
     export default {
         name: 'App',
@@ -48,7 +48,6 @@ Main Vue template for the app. Contains the navigation bar and handles login log
             }
         },
         mounted() {
-            console.log(process.env);
             this.login(true);
         },
         methods: {
@@ -70,7 +69,6 @@ Main Vue template for the app. Contains the navigation bar and handles login log
                         this.setAuthenticated(false);
                         window.location.replace(process.env.VUE_APP_BACKEND_URL + '/auth/cas');
                       }
-                      console.log(response);
                     })
                     .catch((error) => {
                       console.log(error);

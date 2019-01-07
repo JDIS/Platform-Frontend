@@ -17,7 +17,7 @@ Component that displays a list of challenges, grouped by category.
                               <h2>{{ challenge.name }}</h2>
                           </div>
                           <div class="col-5">
-                              <h5>Catégorie: <strong>{{ categories[challenge.category] }}</strong></h5>
+                              <h5>Catégorie: <strong>{{ categories[challenge.categoryId] }}</strong></h5>
                           </div>
                           <div class="col-4">
                               <strong><span v-if="challenge.isCodingChallenge">Correction automatique</span></strong>
@@ -46,7 +46,7 @@ export default class ChallengesComponent extends Vue {
     @Prop() categories!: Category[];
 
     openChallenge(challenge: Challenge): void {
-        this.$router.push(`/challenge/${challenge.id}`, (a) => console.log("yezzer",a))
+        this.$router.push(`/challenge/${challenge.id}`)
     }
 
     toggleCategory(category: GroupedChallenges) {
