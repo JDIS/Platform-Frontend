@@ -7,11 +7,11 @@
       </option>
     </select>
     <AceEditor
+      style="width: 100%;"
       :mode="highlightMode"
       theme="monokai"
       :onChange="codeChanged"
       name="ace-editor-1"
-      :width="`${editorWidth.toString()}px`"
     />
   </span>
 </template>
@@ -38,14 +38,19 @@
   export default class CodeEditor extends Vue {
     public $el!: HTMLElement;
     private editorWidth: number = 500;
-    private langs: Array<string> = ['python', 'javascript'];
+    private langs: Array<string> = ['python', 'javascript', 'ruby', 'c_cpp', 'csharp', 'java', 'rust'];
     private highlightMode: string = 'python';
 
     private codeChanged(code: string) {
+      this.$emit('updated', code)
     }
 
     private mounted() {
       this.editorWidth = this.$el.offsetWidth;
+    }
+
+    private props() {
+      return ['languagesAllowed'];
     }
 
     private changeLang(langChange: Event) {
