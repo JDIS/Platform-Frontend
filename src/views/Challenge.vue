@@ -168,6 +168,8 @@ export default class ChallengeView extends Vue {
 
 <style scoped lang="less">
 .challenge__description {
+  margin-top: 27px;
+  margin-right: 20px;
   text-align: left;
   flex: 1;
 }
