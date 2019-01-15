@@ -7,14 +7,14 @@ class Boilerplate {
 }
 
 export class Challenge {
-    public id!: string;
-    public name!: string;
-    public description!: string;
-    public categoryId!: string;
-    public isCodingChallenge!: boolean;
-    public boilerplates!: Array<Boilerplate>;
-    public languagesAllowed!: object;
-    public points!: number;
-    public timeAllowed!: number;
-
+  public id!: string;
+  public name!: string;
+  public description!: string;
+  public category!: string;
+  public isCodingChallenge!: boolean;
+  public boilerplates!: Array<Boilerplate>;
+  public languagesAllowed!: object;
+  public points!: number;
+  public timeAllowed!: number;
+  public numberTests!: number;
 }

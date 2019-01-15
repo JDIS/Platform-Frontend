@@ -27,8 +27,6 @@ View to display a single challenge to solve.
         <pre v-if='testResult.output != ""'>{{ testResult.output }}</pre>
         <pre v-if='testResult.error != ""'>{{ testResult.error }}</pre>
       </div>
-
-      
     </div>
   </div>
 </template>
