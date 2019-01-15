@@ -22,7 +22,13 @@ View to display a single challenge to solve.
         <button v-on:click="submit()">Soumettre</button>
       </div>
       <div>{{ bannerContent }}</div>
-      <code>{{ output }}</code>
+      <div v-for="(testResult, index) in testResults">
+        <div><b>Test {{ index + 1 }} ({{ testResult.isSuccess ? "réussi" : "échec"}})</b></div>
+        <pre v-if='testResult.output != ""'>{{ testResult.output }}</pre>
+        <pre v-if='testResult.error != ""'>{{ testResult.error }}</pre>
+      </div>
+
+      
     </div>
   </div>
 </template>
@@ -33,6 +39,7 @@ import CodeEditor from "@/components/CodeEditor.vue";
 import MarkdownRender from "@/components/MarkdownRender.vue";
 import axios from "axios";
 import { Challenge } from "@/models/Challenge";
+import { TestResult } from "@/models/TestResult";
 import { Language } from "@/models/Language";
 import { Code } from "@/models/Code";
 
@@ -47,7 +54,7 @@ export default class ChallengeView extends Vue {
   private challengeId: string = "";
   private bannerContent: string = "";
   private solution: string = "";
-  private output: string = "";
+  private testResults: Array<TestResult> = [];
   private codes: Array<Code> = [];
   private languages: Array<Language> = [];
   private selectedLanguage: Language = new Language();
@@ -107,9 +114,10 @@ export default class ChallengeView extends Vue {
         )
       )
       .then(response => {
-        const testResult = response.data.tests[0]
-        this.output = testResult.output
-        if (testResult.isSuccess) {
+        this.testResults = response.data.tests;
+
+        const challengeSolved = this.testResults.every(test => test.isSuccess)
+        if (challengeSolved) {
           this.displayBanner("Defi reussi!")
         } else {
           this.displayBanner("Mauvaise reponse. Essayez de nouveau.")
