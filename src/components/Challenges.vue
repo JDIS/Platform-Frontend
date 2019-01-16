@@ -69,11 +69,11 @@ export default class ChallengesComponent extends Vue {
     return result.tests.reduce((acc, t) => acc + (t.isSuccess ? 1 : 0 ), 0);
   }
 
-  categoryTestCount(category: Category): number {
+  categoryTestCount(category: GroupedChallenges): number {
     return category.values.reduce((acc, c) => acc + c.numberTests, 0);
   }
 
-  categorySuccessCount(category: Category): number {
+  categorySuccessCount(category: GroupedChallenges): number {
     return category.values.reduce((acc, c) => acc + this.challengeTestSuccessCount(c), 0);
   }
 }
