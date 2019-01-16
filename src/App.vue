@@ -6,22 +6,22 @@ Main Vue template for the app. Contains the navigation bar and handles login log
   <div id="app">
     <div class="container-fluid" id="nav-container">
       <div class="row align-items-center" id="nav">
-        <div class="col-8">
+        <div class="col-6">
           <router-link to="/">
             <img alt="JDIS logo" src="./assets/jdis.png" style="height: 30px"></img>
             <span style="margin: 0 10px">Sélection CSGames 2019</span>
           </router-link>
         </div>
-        <div class="col-4">
+        <div class="col-6">
           <ul class="nav justify-content-end">
             <li class="nav-item" v-if="admin">
               <router-link to="/admin">Admin</router-link>
             </li>
             <li class="nav-item" v-if="authenticated">
-              <router-link to="/leaderboard">Classement</router-link>
+              <router-link to="/challenges">Liste des défis</router-link>
             </li>
             <li class="nav-item" v-if="authenticated">
-              <router-link to="/challenges">Liste des défis</router-link>
+              <router-link to="/leaderboard">Classement</router-link>
             </li>
             <li class="nav-item" v-if="!authenticated">
               <a href="#" v-on:click="login">Connexion</a>
@@ -103,13 +103,12 @@ Main Vue template for the app. Contains the navigation bar and handles login log
 #nav-container {
   #nav {
     padding: 15px;
-    max-width: 1600px;
   }
-  color: aliceblue;
+  color: white;
   background-color: #2d9d5f;
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: white;
     &.router-link-exact-active {
       text-decoration: underline;
       color: white;

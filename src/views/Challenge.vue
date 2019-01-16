@@ -16,10 +16,11 @@ View to display a single challenge to solve.
         v-bind:solution="solution"
         :languages="languages"
         :selectedLanguage="selectedLanguage"
+        class="code-editor"
       />
-      <div>
-        <button v-on:click="save()">Enregistrer</button>
-        <button v-on:click="submit()">Soumettre</button>
+      <div class="buttons">
+        <button class="button button--submit" v-on:click="submit()">Soumettre</button>
+        <button class="button button--save" v-on:click="save()">Enregistrer</button>
       </div>
       <div>{{ bannerContent }}</div>
       <div v-for="(testResult, index) in testResults">
@@ -124,9 +125,9 @@ export default class ChallengeView extends Vue {
 
         const challengeSolved = this.testResults.every(test => test.isSuccess)
         if (challengeSolved) {
-          this.displayBanner("Defi reussi!")
+          this.displayBanner("Défi reussi!")
         } else {
-          this.displayBanner("Mauvaise reponse. Essayez de nouveau.")
+          this.displayBanner("Mauvaise réponse. Essayez de nouveau.")
         }
       })
       .catch(error => console.log("Error when submitting solution: ", error));
@@ -150,6 +151,8 @@ export default class ChallengeView extends Vue {
         { withCredentials: true }
       ).then(response => {
         this.codes = response.data;
+        this.displayBanner("Code sauvegardé.")
+        this.testResults = [];
       });
     });
   }
@@ -180,9 +183,9 @@ export default class ChallengeView extends Vue {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
+
 .challenge__description {
-  margin-top: 27px;
   margin-right: 20px;
   text-align: left;
   flex: 1;
@@ -194,5 +197,54 @@ export default class ChallengeView extends Vue {
 
 .challenge {
   display: flex;
+  color: white;
+  margin-top: 1em;
+}
+
+.buttons {
+  display: flex;
+}
+
+body {
+  background: #202020;
+}
+
+.button {
+  flex: 1;
+  border: 0;
+  padding: 0.4em 0.8em;
+  color: white;
+  font-weight: bold;
+  margin-right: 1em;
+  cursor: pointer;
+  border-radius: 3px;
+
+  &--submit {
+    background: #2d9d5f;
+    &:hover{
+      background: lighten(#2d9d5f, 5);
+    }
+  }
+  &--save {
+    background: #185232;
+    &:hover{
+      background: lighten(#185232, 5);
+    }
+  }
+
+  &:hover {
+  }
+}
+
+.code-editor {
+  margin-bottom: 1em;
+  display: block;
+}
+
+.header {
+  background-color: #35362f;
+  display: flex;
+  align-items: center;
+  height: 3em;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <span>
-    <h1>Description</h1>
+    <div class="header">Description du défi</div>
     <div class="markdown-container" v-bar>
       <div>
          <vue-markdown class="markdown-render">{{markdown}}</vue-markdown>
@@ -25,14 +25,24 @@
 </script>
 
 <style lang="less">
+  .header {
+    background-color: #35362f;
+    padding: 0.5em 1em;
+  }
+
   .markdown-container {
     background-color: #272822;
-    height: 500px
+    height: 85vh;
   }
 
   .markdown-render {
     color: #f0f0f0;
-    margin: 10px;
+    margin: 1em;
+  }
+
+  .vb-content {
+    overflow: auto !important;
+    padding-right: 0 !important;
   }
 
   pre {

@@ -4,7 +4,7 @@ View to display the challenges list.
 
 <template>
   <div class="challenges-view">
-    <h1 class="spaced">Challenges</h1>
+    <h1 class="spaced">Défis</h1>
     <ChallengesComponent :challenges="challenges" :categories="categories" :results="results" />
   </div>
 </template>

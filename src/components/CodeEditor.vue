@@ -1,13 +1,15 @@
 <template>
   <span class="code-editor">
-    <h1>Editeur</h1>
-    <select v-model="selectedLanguage" @change="changeLang">
-      <option v-for="language in languages" v-bind:value="language" :key="language.id">
-        {{ language.name }}
-      </option>
-    </select>
+    <div class="header language-selector-section">
+      <div>Éditeur de code</div>
+      <select class="language-selector" v-model="selectedLanguage" @change="changeLang">
+        <option v-for="language in languages" v-bind:value="language" :key="language.id">
+          {{ language.name }}
+        </option>
+      </select>
+    </div>
     <AceEditor
-      style="width: 100%;"
+      style="width: 100%; height: 70vh;"
       :mode="highlightMode"
       theme="monokai"
       :onChange="codeChanged"
@@ -59,3 +61,10 @@
     }
   }
 </script>
+
+<style lang="less">
+.language-selector-section {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
