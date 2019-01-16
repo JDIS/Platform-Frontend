@@ -14,6 +14,9 @@ Main Vue template for the app. Contains the navigation bar and handles login log
         </div>
         <div class="col-4">
           <ul class="nav justify-content-end">
+            <li class="nav-item" v-if="admin">
+              <router-link to="/admin">Admin</router-link>
+            </li>
             <li class="nav-item" v-if="authenticated">
               <router-link to="/leaderboard">Classement</router-link>
             </li>
@@ -46,6 +49,7 @@ Main Vue template for the app. Contains the navigation bar and handles login log
         data() {
             return {
                 authenticated: window.localStorage.getItem("authenticated") === "true",
+                admin: window.localStorage.getItem("admin") === "true"
             }
         },
         mounted() {
@@ -55,6 +59,10 @@ Main Vue template for the app. Contains the navigation bar and handles login log
           setAuthenticated(status) {
             window.localStorage.setItem("authenticated", status);
             this.authenticated = status;
+          },
+          setAdmin(status) {
+            window.localStorage.setItem("admin", status);
+            this.admin = status;
           },
           logout() {
             this.setAuthenticated(false);
@@ -66,6 +74,7 @@ Main Vue template for the app. Contains the navigation bar and handles login log
                     .then(response => {
                       if(response.status === 200) {
                         this.setAuthenticated(true);
+                        this.setAdmin(response.data.isAdmin);
                       } else if(response.status === 204) {
                         this.setAuthenticated(false);
                         window.location.replace(process.env.VUE_APP_BACKEND_URL + '/auth/cas');
