@@ -71,6 +71,14 @@ export default class ChallengeView extends Vue {
         this.codes = codes.data;
         this.languages = languages.data;
 
+        // Filter languages
+        const { whitelist, blacklist } = this.challenge.languagesAllowed;
+        if (whitelist && whitelist.length) {
+          this.languages = this.languages.filter((l) => whitelist.includes(l.id));
+        } else if (blacklist && blacklist.length) {
+          this.languages = this.languages.filter((l) => !blacklist.includes(l.id));
+        }
+
         // Find selected language
         const defaultLanguage = this.languages[0];
         if (this.codes.length) {
