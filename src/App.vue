@@ -24,7 +24,9 @@ Main Vue template for the app. Contains the navigation bar and handles login log
               <a href="#" v-on:click="login">Connexion</a>
             </li>
             <li class="nav-item" v-else>
-              <a href="#" v-on:click="logout">Déconnexion</a>
+              <div v-on:click="logout">
+                <router-link to="/logout" >Déconnexion</router-link>
+              </div>
             </li>
           </ul>
         </div>
@@ -55,8 +57,8 @@ Main Vue template for the app. Contains the navigation bar and handles login log
             this.authenticated = status;
           },
           logout() {
+            this.setAuthenticated(false);
             axios.post(process.env.VUE_APP_BACKEND_URL + '/signout', {withCredentials: true})
-                    .then(response => this.setAuthenticated(false))
                     .catch((error) => console.log(error));
           },
           login(withCredentials) {

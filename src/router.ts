@@ -9,6 +9,11 @@ export default new Router({
   routes: [
     { path: '/', redirect: '/challenges' },
     {
+      path: '/logout',
+      name: 'logout',
+      component: () => import(/* webpackChunkName: "about" */ './views/Logout.vue'),
+    },
+    {
       path: '/leaderboard',
       name: 'leaderboard',
       // route level code-splitting
