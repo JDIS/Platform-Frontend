@@ -10,26 +10,33 @@ View to display the leaderboard.
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    import LeaderboardComponent from "@/components/Leaderboard.vue"; // @ is an alias to /src
+import {Component, Vue} from "vue-property-decorator";
+import LeaderboardComponent from "@/components/Leaderboard.vue";
+import { Rank } from "@/models/Rank";
+import { User } from "@/models/User";
+import axios from "axios";
 
-    @Component({
+@Component({
   components: {
     LeaderboardComponent,
   },
 })
 export default class Leaderboard extends Vue {
-    protected ranking = [
-        {
-          "name": "Émilio de la Gonzalez",
-          "rank": 1,
-          "points": 42
-        },
-        {
-          "name": "Émilio Gonzalez",
-          "rank": 2,
-          "points": 0
-        }
-      ]
+  private users: Array<User> = [];
+  private ranking: Array<Rank> = [];
+
+  async mounted() {
+    this.users = await axios.get(process.env.VUE_APP_BACKEND_URL + '/users', {withCredentials: true})
+                            .then((response) => response.data);
+
+    this.ranking = []
+    for (const [i, user] of this.users.entries()) {
+      const rank = new Rank();
+      rank.rank = i + 1;
+      rank.name = user.cip;
+      rank.points = user.totalPoints;
+      this.ranking.push(rank);
+    }
+  }
 }
 </script>
