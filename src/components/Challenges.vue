@@ -11,10 +11,10 @@ Component that displays a list of challenges, grouped by category.
             <div class="container-fluid category-header" @click="toggleCategory(category)">
               <h3>
                 {{ categories[category.key] }} ({{ category.values.length }} challenges)
-                <img class="bolt" />
+                <div class="bolt" />
                 {{ categorySuccessCount(category) }}/{{ categoryTestCount(category) }}
               </h3>
-              <img class="angle-right pull-right" :class="{rotate: category.isVisible}" />
+              <div class="angle-right pull-right" :class="{rotate: category.isVisible}" />
             </div>
             <div class="container-fluid" :class="{hidden: !category.isVisible}">
               <div class="row challenge-preview" @click="openChallenge(challenge)" v-for="challenge of category.values">
@@ -22,7 +22,7 @@ Component that displays a list of challenges, grouped by category.
                   <h2>{{ challenge.name }}</h2>
                 </div>
                 <div class="col-4">
-                  <img class="bolt" />
+                  <div class="bolt" />
                   {{ challengeTestSuccessCount(challenge) }}/{{ challenge.numberTests }}
                 </div>
                 <div class="col-4">
@@ -41,7 +41,7 @@ Component that displays a list of challenges, grouped by category.
 </template>
 
 <script lang="ts">
-  import {Component, Prop, Vue} from "vue-property-decorator";
+import {Component, Prop, Vue} from "vue-property-decorator";
 import {GroupedChallenges} from "@/models/GroupedChallenges";
 import {Challenge} from "@/models/Challenge";
 import {Category} from "@/models/Category";
