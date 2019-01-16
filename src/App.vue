@@ -7,7 +7,7 @@ Main Vue template for the app. Contains the navigation bar and handles login log
     <div class="container-fluid" id="nav-container">
       <div class="row align-items-center" id="nav">
         <div class="col-8">
-          <router-link to="/challenges">
+          <router-link to="/">
             <img alt="JDIS logo" src="./assets/jdis.png" style="height: 30px"></img>
             <span style="margin: 0 10px">Sélection CSGames 2019</span>
           </router-link>
