@@ -18,15 +18,12 @@ View to display a single challenge to solve.
         :selectedLanguage="selectedLanguage"
         class="code-editor"
       />
-      <div class="buttons">
-        <button class="button button--submit" v-on:click="submit()">Soumettre</button>
-        <button class="button button--save" v-on:click="save()">Enregistrer</button>
-      </div>
+      <button class="button button--submit" v-on:click="submit()">Soumettre</button>
       <div>{{ bannerContent }}</div>
       <div v-for="(testResult, index) in testResults">
         <div><b>Test {{ index + 1 }} ({{ testResult.isSuccess ? "réussi" : "échec"}})</b></div>
-        <pre v-if='testResult.output != ""'>{{ testResult.output }}</pre>
-        <pre v-if='testResult.error != ""'>{{ testResult.error }}</pre>
+        <pre v-if='testResult.output && testResult.output != ""'>{{ testResult.output }}</pre>
+        <pre v-if='testResult.error && testResult.error != ""'>{{ testResult.error }}</pre>
       </div>
     </div>
   </div>
@@ -100,6 +97,7 @@ export default class ChallengeView extends Vue {
   }
 
   submit() {
+    this.save();
     axios({
       method: "POST",
       url: `${process.env.VUE_APP_BACKEND_URL}/codes/submit`,
@@ -201,16 +199,12 @@ export default class ChallengeView extends Vue {
   margin-top: 1em;
 }
 
-.buttons {
-  display: flex;
-}
-
 body {
   background: #202020;
 }
 
 .button {
-  flex: 1;
+  width:100%;
   border: 0;
   padding: 0.4em 0.8em;
   color: white;
@@ -223,12 +217,6 @@ body {
     background: #2d9d5f;
     &:hover{
       background: lighten(#2d9d5f, 5);
-    }
-  }
-  &--save {
-    background: #185232;
-    &:hover{
-      background: lighten(#185232, 5);
     }
   }
 

@@ -69,4 +69,12 @@
     background-color: #f9f2f4;
     border-radius: 4px;
   }
+
+  hr {
+    border-top: 1px solid rgba(255, 255, 255, 0.336);
+  }
+
+  .ace_active-line {
+    border-right: 2px solid rgb(39, 40, 34);
+  }
 </style>
