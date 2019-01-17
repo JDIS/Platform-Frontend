@@ -40,3 +40,13 @@ export default class Leaderboard extends Vue {
   }
 }
 </script>
+
+<style scoped lang="less">
+.leaderboard-view {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  border: 1px solid #dedede;
+  margin: 20px 0 20px;
+  padding: 20px 0 20px;
+}
+</style>
