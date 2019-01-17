@@ -9,6 +9,8 @@ Component that displays all tests
       <div v-for="(test, index) in tests">
         <Test
           class="test"
+          @selected="selectedTestChanged"
+          v-bind:id="test.id"
           v-bind:name="test.name"
           :number="index + 1 "
           v-bind:isSuccess="test.isSuccess"
@@ -30,6 +32,10 @@ import Test from "@/components/Test.vue";
 })
 export default class Tests extends Vue {
   @Prop() private tests!: Array<ChallengeTest>;
+
+  selectedTestChanged(id) {
+    this.$emit('selectedTest', id);
+  }
 }
 </script>
 

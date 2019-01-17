@@ -1,17 +1,11 @@
-import { Test } from "@/models/Test";
-
 /**
  * A challenge test
  */
 
 export class ChallengeTest {
-  constructor(test: Test) {
-    this.id = test.id;
-    this.name = test.name;
-  }
-
   public id!: string;
   public name!: string;
+  public isPublic!: boolean;
   public isSuccess!: boolean;
   public isTimeout!: boolean;
   public isCompilationError!: boolean;

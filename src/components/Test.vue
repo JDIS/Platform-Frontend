@@ -3,7 +3,7 @@ Component that displays a test and it's result
 -->
 
 <template>
-  <div class="test-container row">
+  <div class="test-container row" @click="selectTest()">
     <div class="number" v-bind:class="numberColorSelector()">{{number}}</div>
     <div class="name">{{name}}</div>
   </div>
@@ -14,10 +14,15 @@ Component that displays a test and it's result
 
 @Component
 export default class Test extends Vue {
+    @Prop() private id!: string;
     @Prop() private number!: Number;
     @Prop() private name!: string;
     @Prop() private isPublic!: boolean;
     @Prop() private isSuccess?: boolean;
+
+    selectTest() {
+      this.$emit('selected', this.id);
+    }
 
     numberColorSelector() {
       if (this.isSuccess) {
@@ -33,6 +38,11 @@ export default class Test extends Vue {
 .test-container {
   background: #A2A498;
   padding: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background: darken(#A2A498, 10);
+  }
 }
 
 .number {

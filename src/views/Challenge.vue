@@ -20,13 +20,22 @@ View to display a single challenge to solve.
           class="code-editor"
         />
         <button class="button button--submit" v-on:click="submit()">Soumettre</button>
-        <div>{{ bannerContent }}</div>
+        <div class="banner"
+          v-if="bannerContent"
+          v-bind:class="{'banner--success': bannerSuccess, 'banner--error': !bannerSuccess}">
+          {{ bannerContent }}
+        </div>
       </div>
     </div>
     <div class="challenge-bottom">
       <Tests
         class="challenge__tests"
+        @selectedTest="onSelectedTestChange"
         v-bind:tests="tests"
+      />
+      <Console
+        class="challenge-console"
+        v-bind:test="selectedTest"
       />
     </div>
   </div>
@@ -37,6 +46,7 @@ import { Component, Vue } from "vue-property-decorator";
 import CodeEditor from "@/components/CodeEditor.vue";
 import MarkdownRender from "@/components/MarkdownRender.vue";
 import Tests from "@/components/Tests.vue";
+import Console from "@/components/Console.vue";
 import axios from "axios";
 import { Challenge } from "@/models/Challenge";
 import { ChallengeTest } from "@/models/ChallengeTest";
@@ -48,7 +58,8 @@ import { TestResult } from '@/models/TestResult';
   components: {
     MarkdownRender,
     CodeEditor,
-    Tests
+    Tests,
+    Console
   }
 })
 export default class ChallengeView extends Vue {
@@ -60,6 +71,8 @@ export default class ChallengeView extends Vue {
   private codes: Array<Code> = [];
   private languages: Array<Language> = [];
   private selectedLanguage: Language = new Language();
+  private selectedTest: ChallengeTest = new ChallengeTest();
+  private bannerSuccess: boolean = false;
 
   mounted() {
     this.challengeId = this.$route.params["id"];
@@ -75,7 +88,13 @@ export default class ChallengeView extends Vue {
         this.challenge = challenge.data;
         this.codes = codes.data;
         this.languages = languages.data;
-        this.tests = tests.data.map((t) => new ChallengeTest(t));
+        this.tests = tests.data.map((t) => {
+          const test = new ChallengeTest();
+          test.id = t.id;
+          test.name = t.name;
+          test.isPublic = t.isPublic;
+          return test;
+        });
 
         // Filter languages
         const { whitelist, blacklist } = this.challenge.languagesAllowed;
@@ -130,14 +149,20 @@ export default class ChallengeView extends Vue {
         const testResults: Array<TestResult> = response.data.tests;
 
         for (const test of this.tests) {
-          const a = testResults.find((t) => t.test === test.id);
-          this.$set(test, 'isSuccess', a!.isSuccess);
+          const result = testResults.find((t) => t.test === test.id);
+          this.$set(test, 'isSuccess', result!.isSuccess);
+          this.$set(test, 'isTimeout', result!.isTimeout);
+          this.$set(test, 'isCompilationError', result!.isCompilationError);
+          this.$set(test, 'output', result!.output);
+          this.$set(test, 'error', result!.error);
         }
 
         const challengeSolved = testResults.every(test => test.isSuccess)
         if (challengeSolved) {
+          this.bannerSuccess = true;
           this.displayBanner("Défi reussi!")
         } else {
+          this.bannerSuccess = false;
           this.displayBanner("Mauvaise réponse. Essayez de nouveau.")
         }
       })
@@ -162,6 +187,7 @@ export default class ChallengeView extends Vue {
         { withCredentials: true }
       ).then(response => {
         this.codes = response.data;
+        this.bannerSuccess = true;
         this.displayBanner("Code sauvegardé.")
       });
     });
@@ -169,6 +195,10 @@ export default class ChallengeView extends Vue {
 
   displayBanner(content) {
     this.bannerContent = content;
+  }
+
+  onSelectedTestChange(value) {
+    this.selectedTest = this.tests.find((t) => t.id === value)!;
   }
 
   onSolutionChange(value) {
@@ -207,10 +237,17 @@ export default class ChallengeView extends Vue {
 
 .challenge__tests {
   margin-top: 20px;
+  margin-right: 20px;
+  flex: 3;
+}
+
+.challenge-console {
+  margin-top: 20px;
+  flex: 2;
 }
 
 .challenge-bottom {
-  //display: flex;
+  display: flex;
 }
 
 .challenge-top {
@@ -257,5 +294,23 @@ body {
   display: flex;
   align-items: center;
   height: 3em;
+}
+
+.banner {
+  margin-top: 1em;
+  color: white;
+  padding: 0.85em 1.7em;
+  width:100%;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 3px;
+
+  &--success {
+    background-color: #048202; 
+  }
+
+  &--error {
+    background-color: #e01008; 
+  }
 }
 </style>
