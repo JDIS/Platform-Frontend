@@ -25,6 +25,9 @@
 </script>
 
 <style lang="less">
+  .markdown-container div {
+    width: initial !important;
+  }
   .header {
     background-color: #35362f;
     padding: 0.5em 1em;
