@@ -4,27 +4,30 @@ View to display a single challenge to solve.
 
 <template>
   <div class="challenge">
-    <MarkdownRender
-      class="challenge__description"
-      v-if="challenge.description"
-      :markdown="challenge.description || ''"
-    />
-    <div class="challenge__solution">
-      <CodeEditor
-        @updated="onSolutionChange"
-        @langUpdated="onLanguageChange"
-        v-bind:solution="solution"
-        :languages="languages"
-        :selectedLanguage="selectedLanguage"
-        class="code-editor"
+    <div class="challenge-top">
+      <MarkdownRender
+        class="challenge__description"
+        v-if="challenge.description"
+        :markdown="challenge.description || ''"
       />
-      <button class="button button--submit" v-on:click="submit()">Soumettre</button>
-      <div>{{ bannerContent }}</div>
-      <div v-for="(testResult, index) in testResults">
-        <div><b>Test {{ index + 1 }} ({{ testResult.isSuccess ? "réussi" : "échec"}})</b></div>
-        <pre v-if='testResult.output && testResult.output != ""'>{{ testResult.output }}</pre>
-        <pre v-if='testResult.error && testResult.error != ""'>{{ testResult.error }}</pre>
+      <div class="challenge__solution">
+        <CodeEditor
+          @updated="onSolutionChange"
+          @langUpdated="onLanguageChange"
+          v-bind:solution="solution"
+          :languages="languages"
+          :selectedLanguage="selectedLanguage"
+          class="code-editor"
+        />
+        <button class="button button--submit" v-on:click="submit()">Soumettre</button>
+        <div>{{ bannerContent }}</div>
       </div>
+    </div>
+    <div class="challenge-bottom">
+      <Tests
+        class="challenge__tests"
+        v-bind:tests="tests"
+      />
     </div>
   </div>
 </template>
@@ -33,16 +36,19 @@ View to display a single challenge to solve.
 import { Component, Vue } from "vue-property-decorator";
 import CodeEditor from "@/components/CodeEditor.vue";
 import MarkdownRender from "@/components/MarkdownRender.vue";
+import Tests from "@/components/Tests.vue";
 import axios from "axios";
 import { Challenge } from "@/models/Challenge";
-import { TestResult } from "@/models/TestResult";
+import { ChallengeTest } from "@/models/ChallengeTest";
 import { Language } from "@/models/Language";
 import { Code } from "@/models/Code";
+import { TestResult } from '@/models/TestResult';
 
 @Component({
   components: {
     MarkdownRender,
-    CodeEditor
+    CodeEditor,
+    Tests
   }
 })
 export default class ChallengeView extends Vue {
@@ -50,7 +56,7 @@ export default class ChallengeView extends Vue {
   private challengeId: string = "";
   private bannerContent: string = "";
   private solution: string = "";
-  private testResults: Array<TestResult> = [];
+  private tests: Array<ChallengeTest> = [];
   private codes: Array<Code> = [];
   private languages: Array<Language> = [];
   private selectedLanguage: Language = new Language();
@@ -62,12 +68,14 @@ export default class ChallengeView extends Vue {
       .all([
         axios.get(`${process.env.VUE_APP_BACKEND_URL}/challenges/${this.challengeId}`, { withCredentials: true }),
         axios.get(`${process.env.VUE_APP_BACKEND_URL}/codes?challenge=${this.challengeId}`, { withCredentials: true }),
-        axios.get(`${process.env.VUE_APP_BACKEND_URL}/languages`, { withCredentials: true })
+        axios.get(`${process.env.VUE_APP_BACKEND_URL}/languages`, { withCredentials: true }),
+        axios.get(`${process.env.VUE_APP_BACKEND_URL}/challenges/${this.challengeId}/tests`, { withCredentials: true })
       ])
-      .then(axios.spread((challenge, codes, languages) => {
+      .then(axios.spread((challenge, codes, languages, tests) => {
         this.challenge = challenge.data;
         this.codes = codes.data;
         this.languages = languages.data;
+        this.tests = tests.data.map((t) => new ChallengeTest(t));
 
         // Filter languages
         const { whitelist, blacklist } = this.challenge.languagesAllowed;
@@ -119,9 +127,14 @@ export default class ChallengeView extends Vue {
         )
       )
       .then(response => {
-        this.testResults = response.data.tests;
+        const testResults: Array<TestResult> = response.data.tests;
 
-        const challengeSolved = this.testResults.every(test => test.isSuccess)
+        for (const test of this.tests) {
+          const a = testResults.find((t) => t.test === test.id);
+          this.$set(test, 'isSuccess', a!.isSuccess);
+        }
+
+        const challengeSolved = testResults.every(test => test.isSuccess)
         if (challengeSolved) {
           this.displayBanner("Défi reussi!")
         } else {
@@ -150,7 +163,6 @@ export default class ChallengeView extends Vue {
       ).then(response => {
         this.codes = response.data;
         this.displayBanner("Code sauvegardé.")
-        this.testResults = [];
       });
     });
   }
@@ -186,15 +198,26 @@ export default class ChallengeView extends Vue {
 .challenge__description {
   margin-right: 20px;
   text-align: left;
-  flex: 1;
+  flex: 3;
 }
 
 .challenge__solution {
-  flex: 1;
+  flex: 2;
+}
+
+.challenge__tests {
+  margin-top: 20px;
+}
+
+.challenge-bottom {
+  //display: flex;
+}
+
+.challenge-top {
+  display: flex;
 }
 
 .challenge {
-  display: flex;
   color: white;
   margin-top: 1em;
 }
