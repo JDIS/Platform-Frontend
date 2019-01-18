@@ -14,7 +14,7 @@ Main Vue template for the app. Contains the navigation bar and handles login log
         </div>
         <div class="col-6">
           <ul class="nav justify-content-end">
-            <li class="nav-item" v-if="admin">
+            <li class="nav-item" v-if="admin && authenticated">
               <router-link to="/admin">Admin</router-link>
             </li>
             <li class="nav-item" v-if="authenticated">
