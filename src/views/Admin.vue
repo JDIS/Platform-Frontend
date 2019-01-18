@@ -36,7 +36,7 @@ export default class Admin extends Vue {
   private status: string = "";
 
   async seed(type: string) {
-    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/${type}/seed`);
+    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/${type}/seed`, {}, {validateStatus: undefined});
 
     if (response.status === 200) {
       this.status = 'OK';
