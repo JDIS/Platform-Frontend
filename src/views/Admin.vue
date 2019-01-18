@@ -10,6 +10,20 @@
         <p v-if="status" class="admin-response"><strong>Status:</strong> {{status}}</p>
       </div>
     </div>
+    <div class="spaced admin-panel">
+      <h2 style="margin: 5px">Submit</h2>
+      <div>
+        <button v-on:click="submit('activate')" class="btn btn-secondary admin-button">Activate</button>
+        <button v-on:click="submit('deactivate')" class="btn btn-secondary admin-button">Deactivate</button>
+      </div>
+    </div>
+    <div class="spaced admin-panel">
+      <h2 style="margin: 5px">Challenges</h2>
+      <div>
+        <button v-on:click="challenges('activate')" class="btn btn-secondary admin-button">Activate</button>
+        <button v-on:click="challenges('deactivate')" class="btn btn-secondary admin-button">Deactivate</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -29,6 +43,14 @@ export default class Admin extends Vue {
     } else {
       this.status = 'Erreur...';
     }
+  }
+
+  async submit(action) {
+    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/settings/submit/${action}`);
+  }
+
+  async challenges(action) {
+    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/settings/challenges/${action}`);
   }
 }
 </script>
