@@ -7,11 +7,12 @@ View to display a single challenge to solve.
     <div class="challenge-top">
       <MarkdownRender
         class="challenge__description"
-        v-if="challenge.description"
+        v-if="challenge.description && !fullscreen"
         :markdown="challenge.description || ''"
       />
       <div class="challenge__solution">
         <CodeEditor
+          @fullscreen="onFullscreen"
           @updated="onSolutionChange"
           @langUpdated="onLanguageChange"
           v-bind:solution="solution"
@@ -77,6 +78,7 @@ export default class ChallengeView extends Vue {
   private bannerSuccess: boolean = false;
   protected percentage: number = 0;
   protected points: number = 0;
+  private fullscreen: boolean = false;
 
   destroyed() {
     const app = document.getElementById("app");
@@ -237,6 +239,10 @@ export default class ChallengeView extends Vue {
       solution =  (boilerplate && boilerplate.code) || "";
     }
     this.solution = solution;
+  }
+
+  onFullscreen() {
+    this.fullscreen = !this.fullscreen;
   }
 }
 </script>

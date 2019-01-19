@@ -2,11 +2,14 @@
   <span class="code-editor">
     <div class="header language-selector-section">
       <div>Éditeur de code</div>
-      <select class="language-selector" v-model="selectedLanguage" @change="changeLang">
-        <option v-for="language in languages" v-bind:value="language" :key="language.id">
-          {{ language.name }}
-        </option>
-      </select>
+      <div>
+        <select class="language-selector" v-model="selectedLanguage" @change="changeLang">
+          <option v-for="language in languages" v-bind:value="language" :key="language.id">
+            {{ language.name }}
+          </option>
+        </select>
+        <img v-on:click="fullscreen" class="fullscreen" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD/SURBVGhD7dg9agJBHIbxTaEkCopViE3A3sYTBDyBoBJyiNxEwUMEJYdI5SXEO0Txo018ZsRGZmX/yrCi7wM/cAoH38rVRCl13z2gZlDFORURui9NGabcB/s3msDSK1YI3ZXmC6YOQ/7wm9EQlp4xQ+iuYxtcNGTpT/n3AQ3RkAhpiIZESkNuZkgF7o0Lf8q/d5w1xDWG9bEjVi+You9PSimllFLqamqgvn95FbXwtH+ZvQLWmPtT/rXhHuNH/mRIvxAjpSEaEikN0ZBIachhyBa9DLpw/z1Ze0PovmPuG/2iIRY/sNRE6J5TzENK+DbqwNIjBgjdleYTSqn7LUl2Bci5+aD+MsEAAAAASUVORK5CYII=">
+      </div>
     </div>
     <AceEditor
       style="width: 100%; height: 70vh;"
@@ -60,6 +63,10 @@ export default class CodeEditor extends Vue {
     this.highlightMode = this.selectedLanguage.highlight;
     this.$emit('langUpdated', this.selectedLanguage)
   }
+  
+  private fullscreen() {
+    this.$emit('fullscreen');
+  }
 }
 </script>
 
@@ -70,5 +77,18 @@ export default class CodeEditor extends Vue {
 }
 .code-editor {
   width: 100%;
+}
+
+.fullscreen {
+  margin-left: 10px;
+  width: 25px;
+  height: 25px;
+  filter: invert(100%);
+  cursor: pointer;
+  background: transparent;
+
+  &:hover{
+    box-shadow: 0 0 10px black;
+  }  
 }
 </style>
