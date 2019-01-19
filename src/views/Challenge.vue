@@ -32,6 +32,8 @@ View to display a single challenge to solve.
         class="challenge__tests"
         @selectedTest="onSelectedTestChange"
         v-bind:tests="tests"
+        v-bind:percentage="percentage"
+        v-bind:points="points"
       />
       <Console
         class="challenge-console"
@@ -73,6 +75,8 @@ export default class ChallengeView extends Vue {
   private selectedLanguage: Language = new Language();
   private selectedTest: ChallengeTest = new ChallengeTest();
   private bannerSuccess: boolean = false;
+  protected percentage: number = 0;
+  protected points: number = 0;
 
   destroyed() {
     const app = document.getElementById("app");
@@ -155,6 +159,8 @@ export default class ChallengeView extends Vue {
       )
       .then(response => {
         const testResults: Array<TestResult> = response.data.tests;
+        this.percentage = response.data.percent;
+        this.points = response.data.points;
 
         for (const test of this.tests) {
           const result = testResults.find((t) => t.test === test.id);
@@ -165,10 +171,14 @@ export default class ChallengeView extends Vue {
           this.$set(test, 'error', result!.error);
         }
 
-        const challengeSolved = testResults.every(test => test.isSuccess)
-        if (challengeSolved) {
+        let testsPassed = 0;
+        testResults.forEach(test => {if(test.isSuccess) testsPassed += 1});
+        if (testsPassed == testResults.length) {
           this.bannerSuccess = true;
-          this.displayBanner("Défi reussi!")
+          this.displayBanner("Défi reussi!");
+        } else if(testsPassed > 0) {
+          this.bannerSuccess = true;
+          this.displayBanner(`${testsPassed}/${testResults.length} tests réussis!`);
         } else {
           this.bannerSuccess = false;
           this.displayBanner("Mauvaise réponse. Essayez de nouveau.")

@@ -4,7 +4,7 @@ Component that displays all tests
 
 <template>
   <div>
-    <div class="header">Tests</div>
+    <div class="header">Tests:  <strong> {{ percentage*100 }}% réussi ({{ points }} points)</strong></div>
     <div class="tests">
       <div v-for="(test, index) in tests">
         <Test
@@ -14,6 +14,7 @@ Component that displays all tests
           v-bind:name="test.name"
           :number="index + 1 "
           v-bind:isSuccess="test.isSuccess"
+          v-bind:isSelected="test.id === selectedTest"
         />
       </div>
     </div>
@@ -32,9 +33,13 @@ import Test from "@/components/Test.vue";
 })
 export default class Tests extends Vue {
   @Prop() private tests!: Array<ChallengeTest>;
+  @Prop() private percentage: number = 0;
+  @Prop() private points: number = 0;
+  private selectedTest: string = "";
 
-  selectedTestChanged(id) {
+  selectedTestChanged(id: string) {
     this.$emit('selectedTest', id);
+    this.selectedTest = id;
   }
 }
 </script>

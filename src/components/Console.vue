@@ -4,7 +4,7 @@ Component that displays a test and it's result
 
 <template>
   <div>
-    <div class="header">Console</div>
+    <div class="header">Console: {{ test.name }}</div>
     <div class="console-status-container">
       <div class="console-status row">
         <div class="console-status-indicator" v-bind:class="statusColorSelector('isSuccess', false)"></div>
