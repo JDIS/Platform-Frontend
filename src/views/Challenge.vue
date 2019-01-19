@@ -74,7 +74,15 @@ export default class ChallengeView extends Vue {
   private selectedTest: ChallengeTest = new ChallengeTest();
   private bannerSuccess: boolean = false;
 
+  destroyed() {
+    const app = document.getElementById("app");
+    app!.style["background-color"] = "white";
+  }
+
   mounted() {
+    const app = document.getElementById("app");
+    app!.style["background-color"] = "#202020";
+
     this.challengeId = this.$route.params["id"];
 
     axios
@@ -257,10 +265,6 @@ export default class ChallengeView extends Vue {
 .challenge {
   color: white;
   margin-top: 1em;
-}
-
-body {
-  background: #202020;
 }
 
 .button {
